@@ -1,0 +1,53 @@
+{
+  "name": "wge-offline-app",
+  "version": "0.0.0",
+  "description": "Offline System for booking and managing fastboat",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "build": {
+    "appId": "com.electron.app",
+    "publish": [
+      {
+        "provider": "generic",
+        "url": "https://gitlab.com"
+      }
+    ],
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "verifyUpdateCodeSignature": false
+    },
+    "mac": {
+      "category": "public.app-category.productivity",
+      "identity": "Mac Developer: bungendang@gmail.com (HJ8UBBCTZH)",
+      "target": [
+        "dmg"
+      ]
+    },
+    "linux": {
+      "target": [
+        "AppImage"
+      ]
+    }
+  },
+  "dependencies": {
+    "electron-updater": "^2.18.2"
+  },
+  "devDependencies": {
+    "electron": "1.6.11",
+    "electron-builder": "^19.16.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bungendang/wge-offline-app.git"
+  },
+  "author": "Endang Kurniawan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bungendang/wge-offline-app/issues"
+  },
+  "homepage": "https://github.com/bungendang/wge-offline-app#readme"
+}
