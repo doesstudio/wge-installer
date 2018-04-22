@@ -1,6 +1,6 @@
 {
   "name": "offline-app",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "description": "Offline System for booking and managing fastboat",
   "main": "main.js",
   "scripts": {
@@ -14,8 +14,8 @@
     "publish": [
       {
         "provider": "github",
-        "owner": "bungendang",
-        "repo": "wge-offline-app"
+        "owner": "doesstudio",
+        "repo": "wge-installer"
       }
     ],
     "win": {
@@ -54,12 +54,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bungendang/wge-offline-app.git"
+    "url": "git+https://github.com/doesstudio/wge-installer.git"
   },
-  "author": "Endang Kurniawan",
+  "author": "Does Studio",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/bungendang/wge-offline-app/issues"
+    "url": "https://github.com/doesstudio/wge-installer/issues"
   },
-  "homepage": "https://github.com/bungendang/wge-offline-app#readme"
+  "homepage": "https://github.com/doesstudio/wge-installer#readme"
 }
