@@ -22,6 +22,7 @@
       "target": [
         "nsis"
       ],
+      "icon": "src/wg-logo-app.ico",
       "verifyUpdateCodeSignature": false
     },
     "nsis": {
