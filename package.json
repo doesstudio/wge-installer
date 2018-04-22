@@ -4,16 +4,17 @@
   "description": "Offline System for booking and managing fastboat",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "build --win",
+    "ship": "build -wml -p always"
   },
   "build": {
-    "appId": "com.electron.app",
-    "publish": [
-      {
-        "provider": "generic",
-        "url": "https://gitlab.com"
-      }
-    ],
+    "appId": "com.wangobelexpress.offline-app",
+    "publish": [{
+      "provider": "github",
+      "owner": "bungendang",
+      "repo": "wge-offline-app"
+    }],
     "win": {
       "target": [
         "nsis"
