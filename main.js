@@ -64,7 +64,7 @@ function createWindow () {
     width: 1280, 
     height: 768,
     backgroundColor: '#ffffff',
-    icon: path.join(__dirname,'src/favicon.ico'),
+    icon: path.join(__dirname,'assets/256x256.png'),
     webPreferences: {
       plugins: true,
       webSecurity:false

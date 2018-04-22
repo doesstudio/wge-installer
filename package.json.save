@@ -1,11 +1,11 @@
 {
   "name": "offline-app",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "description": "Offline System for booking and managing fastboat",
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "build -l",
+    "build": "build -m",
     "publish": "build -wml -p always"
   },
   "build": {
@@ -22,6 +22,7 @@
       "target": [
         "nsis"
       ],
+      "icon": "assets/wg-logo-app.ico",
       "verifyUpdateCodeSignature": false
     },
     "nsis": {
@@ -39,10 +40,10 @@
       ]
     },
     "linux": {
-      "icon": "assets/256x256.png",
       "target": [
-        "deb"
-      ]
+        "AppImage"
+      ],
+      "icon": "assets/wg-logo-app.ico"
     }
   },
   "dependencies": {
@@ -56,7 +57,7 @@
     "type": "git",
     "url": "git+https://github.com/doesstudio/wge-installer.git"
   },
-  "author": "Does Studio <studio@doesuniversity.com>",
+  "author": "Does Studio",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/doesstudio/wge-installer/issues"
