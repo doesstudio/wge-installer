@@ -1,11 +1,11 @@
 {
-  "name": "Offline App",
+  "name": "offline-app",
   "version": "0.0.0",
   "description": "Offline System for booking and managing fastboat",
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "build --win",
+    "build": "build -m",
     "ship": "build -wml -p always"
   },
   "build": {
