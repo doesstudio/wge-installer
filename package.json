@@ -1,5 +1,5 @@
 {
-  "name": "wge-offline-app",
+  "name": "Offline App",
   "version": "0.0.0",
   "description": "Offline System for booking and managing fastboat",
   "main": "main.js",
@@ -9,12 +9,14 @@
     "ship": "build -wml -p always"
   },
   "build": {
-    "appId": "com.wangobelexpress.offline-app",
-    "publish": [{
-      "provider": "github",
-      "owner": "bungendang",
-      "repo": "wge-offline-app"
-    }],
+    "appId": "com.wangobelexpress.offlineapp",
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "bungendang",
+        "repo": "wge-offline-app"
+      }
+    ],
     "win": {
       "target": [
         "nsis"
@@ -38,7 +40,7 @@
     "electron-updater": "^2.18.2"
   },
   "devDependencies": {
-    "electron": "1.6.11",
+    "electron": "^1.8.4",
     "electron-builder": "^19.16.2"
   },
   "repository": {
