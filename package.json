@@ -26,7 +26,6 @@
       "verifyUpdateCodeSignature": false
     },
     "nsis": {
-      "icon": "assets/wg-logo-app.ico",
       "installerIcon": "assets/wg-logo-app.ico",
       "uninstallerIcon": "assets/wg-uninstall-logo-app.ico",
       "runAfterFinish": true,
