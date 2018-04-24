@@ -1,5 +1,5 @@
 // Inital app
-const { app, BrowserWindow, dialog } = require('electron')
+const { app, BrowserWindow, dialog, Menu, protocol, ipcMain } = require('electron')
 const updater = require("electron-updater");
 const autoUpdater = updater.autoUpdater;
 
@@ -66,7 +66,9 @@ function createWindow () {
   })
 
   // win.openDevTools();
-  win.loadURL(`file://${__dirname}/app/index.html`)
+  // win.loadURL(`file://${__dirname}/app/index.html`)
+  win.loadURL(`file://${__dirname}/app/index.html#v${app.getVersion()}`);
+  return win;
   // win.loadURL(url.format({ pathname: path.join(__dirname, 'dist/index.html'), protocol: 'file', slashes: true }))
   // win.loadURL(`file://${__dirname}/passenger-list-2018-04-16-all.pdf`)
 

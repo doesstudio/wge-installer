@@ -1,6 +1,6 @@
 {
   "name": "offline-app",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Offline System for booking and managing fastboat",
   "main": "main.js",
   "scripts": {
