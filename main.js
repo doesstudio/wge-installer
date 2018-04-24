@@ -10,13 +10,6 @@ let win;
 ///////////////////
 // Auto upadater //
 ///////////////////
-autoUpdater.requestHeaders = { "PRIVATE-TOKEN": "Personal access Token" };
-autoUpdater.autoDownload = true;
-
-autoUpdater.setFeedURL({
-    provider: "generic",
-    url: "https://gitlab.com/_example_repo_/-/jobs/artifacts/master/raw/dist?job=build"
-});
 
 autoUpdater.on('checking-for-update', function () {
     sendStatusToWindow('Checking for update...');
@@ -90,7 +83,6 @@ function createWindow () {
 function printPdf(){
   console.log('printPdf')
 }
-
 
 // Create window on electron intialization
 app.on('ready', createWindow)
