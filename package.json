@@ -1,6 +1,6 @@
 {
   "name": "offline-app",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Offline System for booking and managing fastboat",
   "main": "main.js",
   "scripts": {
@@ -26,6 +26,7 @@
       "verifyUpdateCodeSignature": false
     },
     "nsis": {
+      "icon": "assets/wg-logo-app.ico",
       "installerIcon": "assets/wg-logo-app.ico",
       "uninstallerIcon": "assets/wg-uninstall-logo-app.ico",
       "runAfterFinish": true,
