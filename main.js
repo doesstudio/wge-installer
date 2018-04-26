@@ -1,15 +1,27 @@
-// Inital app
-const { app, BrowserWindow, dialog, Menu, protocol, ipcMain } = require('electron')
+// This is free and unencumbered software released into the public domain.
+// See LICENSE for details
+
+const {app, BrowserWindow, Menu, protocol, ipcMain} = require('electron');
 const log = require('electron-log');
-const updater = require("electron-updater");
-const autoUpdater = updater.autoUpdater;
+const {autoUpdater} = require("electron-updater");
 
-let path = require('path')
-
+//-------------------------------------------------------------------
+// Logging
+//
+// THIS SECTION IS NOT REQUIRED
+//
+// This logging setup is not required for auto-updates to work,
+// but it sure makes debugging easier :)
+//-------------------------------------------------------------------
 autoUpdater.logger = log;
 autoUpdater.logger.transports.file.level = 'info';
 log.info('App starting...');
 
+//-------------------------------------------------------------------
+// Define the menu
+//
+// THIS SECTION IS NOT REQUIRED
+//-------------------------------------------------------------------
 let template = []
 if (process.platform === 'darwin') {
   // OS X
@@ -31,114 +43,130 @@ if (process.platform === 'darwin') {
 }
 
 
+//-------------------------------------------------------------------
+// Open a window that displays the version
+//
+// THIS SECTION IS NOT REQUIRED
+//
+// This isn't required for auto-updates to work, but it's easier
+// for the app to show a window than to have to click "About" to see
+// that updates are working.
+//-------------------------------------------------------------------
 let win;
 
-
-
-
-///////////////////
-// Auto upadater //
-///////////////////
-
-autoUpdater.on('checking-for-update', function () {
-    sendStatusToWindow('Checking for update...');
-});
-
-autoUpdater.on('update-available', function (info) {
-    sendStatusToWindow('Update available.');
-});
-
-autoUpdater.on('update-not-available', function (info) {
-    sendStatusToWindow('Update not available.');
-});
-
-autoUpdater.on('error', function (err) {
-    sendStatusToWindow('Error in auto-updater.');
-});
-
-autoUpdater.on('download-progress', function (progressObj) {
-    let log_message = "Download speed: " + progressObj.bytesPerSecond;
-    log_message = log_message + ' - Downloaded ' + parseInt(progressObj.percent) + '%';
-    log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
-    sendStatusToWindow(log_message);
-});
-
-autoUpdater.on('update-downloaded', function (info) {
-    sendStatusToWindow('Update downloaded; will install in 1 seconds');
-});
-
-autoUpdater.on('update-downloaded', function (info) {
-    setTimeout(function () {
-        autoUpdater.quitAndInstall();
-    }, 1000);
-});
-
-autoUpdater.checkForUpdates();
-
-function sendStatusToWindow(message) {
-    console.log(message);
-    }
-
+function sendStatusToWindow(text) {
+  log.info(text);
+  win.webContents.send('message', text);
+}
 function sendProgressToWindow(speed,percent,transferred,total){
   win.webContents.send('progress', percent);
 }
-
-
-function createWindow () {
-  // Create the browser window.
+function createDefaultWindow() {
   win = new BrowserWindow({
     width: 1280, 
     height: 768,
     backgroundColor: '#ffffff',
-    icon: path.join(__dirname,'assets/256x256.png'),
+    icon: path.join(__dirname,'assets/favicon.ico'),
     webPreferences: {
       plugins: true,
       webSecurity:false
     }
-    // icon: path.join(__dirname,'dist/assets/icons/logo-app-1024.icns') //only for mac
-  })
+  });
+  // win.webContents.openDevTools();
 
-  // win.openDevTools();
-  // win.loadURL(`file://${__dirname}/app/index.html`)
+  win.on('closed', () => {
+    win = null;
+  });
+
   win.loadURL(`file://${__dirname}/app/index.html`);
   return win;
-  // win.loadURL(url.format({ pathname: path.join(__dirname, 'dist/index.html'), protocol: 'file', slashes: true }))
-  // win.loadURL(`file://${__dirname}/passenger-list-2018-04-16-all.pdf`)
-
-  //// uncomment below to open the DevTools.
-  // win.webContents.openDevTools()
-
-  // Event when the window is closed.
-  win.on('closed', function () {
-    win = null
-  })
 }
 
 function printVersion(version){
-  win.webContents.send('version', app.getVersion());
+  // app.getVersion()
+
+  win.webContents.send('version', version);
 }
 
-function printPdf(){
-  console.log('printPdf')
-}
-
-// Create window on electron intialization
-app.on('ready', createWindow)
-
-
-
-// Quit when all windows are closed.
-app.on('window-all-closed', function () {
-
-  // On macOS specific close process
-  if (process.platform !== 'darwin') {
-    app.quit()
-  }
+autoUpdater.on('checking-for-update', () => {
+  sendStatusToWindow('Checking for update...');
+  printVersion(app.getVersion())
 })
-
-app.on('activate', function () {
-  // macOS specific close process
-  if (win === null) {
-    createWindow()
-  }
+autoUpdater.on('update-available', (info) => {
+  sendStatusToWindow('Update available.');
+  console.log(info);
+  printVersion(app.getVersion())
+  // win = new BrowserWindow();
+  // win.webContents.openDevTools();
 })
+autoUpdater.on('update-not-available', (info) => {
+  sendStatusToWindow('Update not available.');
+  console.log(info);
+  printVersion(app.getVersion())
+})
+autoUpdater.on('error', (err) => {
+  sendStatusToWindow('Error in auto-updater. ' + err);
+})
+autoUpdater.on('download-progress', (progressObj) => {
+  let log_message = "Download speed: " + progressObj.bytesPerSecond;
+  log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
+  log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
+  sendStatusToWindow(log_message);
+  sendProgressToWindow(progressObj.bytesPerSecond,progressObj.percent,progressObj.transferred,progressObj.total)
+})
+autoUpdater.on('update-downloaded', (info) => {
+  sendStatusToWindow('Update downloaded');
+  autoUpdater.quitAndInstall(); 
+});
+app.on('ready', function() {
+  // Create the Menu
+  const menu = Menu.buildFromTemplate(template);
+  Menu.setApplicationMenu(menu);
+
+  createDefaultWindow();
+});
+app.on('window-all-closed', () => {
+  app.quit();
+});
+
+//
+// CHOOSE one of the following options for Auto updates
+//
+
+//-------------------------------------------------------------------
+// Auto updates - Option 1 - Simplest version
+//
+// This will immediately download an update, then install when the
+// app quits.
+//-------------------------------------------------------------------
+app.on('ready', function()  {
+  autoUpdater.checkForUpdatesAndNotify();
+});
+
+//-------------------------------------------------------------------
+// Auto updates - Option 2 - More control
+//
+// For details about these events, see the Wiki:
+// https://github.com/electron-userland/electron-builder/wiki/Auto-Update#events
+//
+// The app doesn't need to listen to any events except `update-downloaded`
+//
+// Uncomment any of the below events to listen for them.  Also,
+// look in the previous section to see them being used.
+//-------------------------------------------------------------------
+// app.on('ready', function()  {
+//   autoUpdater.checkForUpdates();
+// });
+// autoUpdater.on('checking-for-update', () => {
+// })
+// autoUpdater.on('update-available', (info) => {
+// })
+// autoUpdater.on('update-not-available', (info) => {
+// })
+// autoUpdater.on('error', (err) => {
+// })
+// autoUpdater.on('download-progress', (progressObj) => {
+// })
+// autoUpdater.on('update-downloaded', (info) => {
+//   autoUpdater.quitAndInstall();  
+// })
