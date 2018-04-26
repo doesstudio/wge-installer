@@ -1,12 +1,12 @@
 {
   "name": "offline-app",
-  "version": "0.0.6",
+  "version": "0.0.15",
   "description": "Offline System for booking and managing fastboat",
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "build -l",
-    "publish": "build -wl -p always"
+    "publish": "build -wml -p always"
   },
   "build": {
     "appId": "com.wangobelexpress.offlineapp",
@@ -33,10 +33,11 @@
     },
     "mac": {
       "category": "public.app-category.productivity",
-      "identity": "Mac Developer: bungendang@gmail.com (HJ8UBBCTZH)",
+      "identity": "Mac Developer: Endang Kurniawan (46DK8HPJSE)",
       "icon": "assets/logo-app-1024.icns",
+      "type":"development",
       "target": [
-        "dmg"
+        "dmg","zip"
       ]
     },
     "linux": {

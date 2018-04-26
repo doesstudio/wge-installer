@@ -1,11 +1,40 @@
 // Inital app
 const { app, BrowserWindow, dialog, Menu, protocol, ipcMain } = require('electron')
+const log = require('electron-log');
 const updater = require("electron-updater");
 const autoUpdater = updater.autoUpdater;
 
 let path = require('path')
 
+autoUpdater.logger = log;
+autoUpdater.logger.transports.file.level = 'info';
+log.info('App starting...');
+
+let template = []
+if (process.platform === 'darwin') {
+  // OS X
+  const name = app.getName();
+  template.unshift({
+    label: name,
+    submenu: [
+      {
+        label: 'About ' + name,
+        role: 'about'
+      },
+      {
+        label: 'Quit',
+        accelerator: 'Command+Q',
+        click() { app.quit(); }
+      },
+    ]
+  })
+}
+
+
 let win;
+
+
+
 
 ///////////////////
 // Auto upadater //
@@ -48,6 +77,10 @@ autoUpdater.checkForUpdates();
 
 function sendStatusToWindow(message) {
     console.log(message);
+    }
+
+function sendProgressToWindow(speed,percent,transferred,total){
+  win.webContents.send('progress', percent);
 }
 
 
@@ -67,7 +100,7 @@ function createWindow () {
 
   // win.openDevTools();
   // win.loadURL(`file://${__dirname}/app/index.html`)
-  win.loadURL(`file://${__dirname}/app/index.html#v${app.getVersion()}`);
+  win.loadURL(`file://${__dirname}/app/index.html`);
   return win;
   // win.loadURL(url.format({ pathname: path.join(__dirname, 'dist/index.html'), protocol: 'file', slashes: true }))
   // win.loadURL(`file://${__dirname}/passenger-list-2018-04-16-all.pdf`)
@@ -81,6 +114,9 @@ function createWindow () {
   })
 }
 
+function printVersion(version){
+  win.webContents.send('version', app.getVersion());
+}
 
 function printPdf(){
   console.log('printPdf')
