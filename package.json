@@ -20,7 +20,13 @@
     ],
     "win": {
       "target": [
-        "nsis"
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
       ],
       "icon": "assets/wg-logo-app.ico",
       "verifyUpdateCodeSignature": false
@@ -35,9 +41,10 @@
       "category": "public.app-category.productivity",
       "identity": "Mac Developer: Endang Kurniawan (46DK8HPJSE)",
       "icon": "assets/logo-app-1024.icns",
-      "type":"development",
+      "type": "development",
       "target": [
-        "dmg","zip"
+        "dmg",
+        "zip"
       ]
     },
     "linux": {
@@ -48,11 +55,12 @@
     }
   },
   "dependencies": {
-    "electron-updater": "^2.18.2"
+    "electron-log": "^1.3.0",
+    "electron-updater": "^2.21.4"
   },
   "devDependencies": {
-    "electron": "^1.8.4",
-    "electron-builder": "^19.16.2"
+    "electron": "^1.7.9",
+    "electron-builder": "^20.8.2"
   },
   "repository": {
     "type": "git",
