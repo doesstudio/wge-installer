@@ -4,7 +4,7 @@
 const {app, BrowserWindow, Menu, protocol, ipcMain} = require('electron');
 const log = require('electron-log');
 const {autoUpdater} = require("electron-updater");
-
+let path = require('path')
 //-------------------------------------------------------------------
 // Logging
 //
@@ -62,7 +62,7 @@ function sendProgressToWindow(speed,percent,transferred,total){
   win.webContents.send('progress', percent);
 }
 function createDefaultWindow() {
-  win = new BrowserWindow({
+    win = new BrowserWindow({
     width: 1280, 
     height: 768,
     backgroundColor: '#ffffff',
@@ -73,7 +73,7 @@ function createDefaultWindow() {
     }
   });
   // win.webContents.openDevTools();
-
+  printVersion(app.getVersion())
   win.on('closed', () => {
     win = null;
   });
@@ -124,6 +124,8 @@ app.on('ready', function() {
   Menu.setApplicationMenu(menu);
 
   createDefaultWindow();
+
+
 });
 app.on('window-all-closed', () => {
   app.quit();
