@@ -1,12 +1,12 @@
 {
   "name": "offline-app",
-  "version": "0.0.28",
+  "version": "0.0.29",
   "description": "Offline System for booking and managing fastboat",
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "build -l",
-    "publish": "build -wml -p always"
+    "publish": "build -wl -p always"
   },
   "build": {
     "appId": "com.wangobelexpress.offlineapp",
