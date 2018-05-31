@@ -64,7 +64,7 @@ function sendProgressToWindow(speed,percent,transferred,total){
 function createDefaultWindow() {
     win = new BrowserWindow({
     width: 1280, 
-    height: 768,
+    height: 800,
     backgroundColor: '#ffffff',
     icon: path.join(__dirname,'assets/favicon.ico'),
     webPreferences: {
