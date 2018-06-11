@@ -15,6 +15,8 @@ let path = require('path')
 //-------------------------------------------------------------------
 autoUpdater.logger = log;
 autoUpdater.logger.transports.file.level = 'info';
+autoUpdater.autoDownload = true ;
+autoUpdater.autoInstallOnAppQuit = true;
 log.info('App starting...');
 
 //-------------------------------------------------------------------
@@ -61,6 +63,7 @@ function sendStatusToWindow(text) {
 function sendProgressToWindow(speed,percent,transferred,total){
   win.webContents.send('progress', percent);
 }
+var updateChecker;
 function createDefaultWindow() {
     win = new BrowserWindow({
     width: 1280, 
@@ -74,6 +77,15 @@ function createDefaultWindow() {
   });
   // win.webContents.openDevTools();
   printVersion(app.getVersion())
+
+  updateChecker = setInterval(function(){
+    console.log('update check')
+    autoUpdater.checkForUpdatesAndNotify();
+  }, 10000)
+
+  // learInterval(myTimer);
+
+
   win.on('closed', () => {
     win = null;
   });
@@ -99,6 +111,9 @@ autoUpdater.on('update-available', (info) => {
   // win = new BrowserWindow();
   // win.webContents.openDevTools();
 })
+
+
+
 autoUpdater.on('update-not-available', (info) => {
   sendStatusToWindow('Update not available.');
   console.log(info);
@@ -108,6 +123,7 @@ autoUpdater.on('error', (err) => {
   sendStatusToWindow('Error in auto-updater. ' + err);
 })
 autoUpdater.on('download-progress', (progressObj) => {
+  clearInterval(updateChecker);
   let log_message = "Download speed: " + progressObj.bytesPerSecond;
   log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
   log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
@@ -125,6 +141,11 @@ app.on('ready', function() {
 
   createDefaultWindow();
 
+  setInterval(function(){
+    // printVersion(app.getVersion())
+    // console.log('alert')
+
+  },6000)
 
 });
 app.on('window-all-closed', () => {
@@ -143,7 +164,28 @@ app.on('window-all-closed', () => {
 //-------------------------------------------------------------------
 app.on('ready', function()  {
   autoUpdater.checkForUpdatesAndNotify();
+  // setInterval(function(){
+  //   autoUpdater.checkForUpdatesAndNotify();
+  // }, 6000)
+  workerWindow = new BrowserWindow();
+  workerWindow.loadURL("file://" + __dirname + "/app/printerWindow.html");
+  // `file://${__dirname}/app/index.html`
+  // console.log("file://" + __dirname + "/printerWindow.html")
+  workerWindow.hide();
 });
+
+// retransmit it to workerWindow
+ipcMain.on("printPDF", function(event, content){
+  // console.log('printPDF DONG')
+  workerWindow.webContents.send("printPDF", content);
+  // work
+});
+
+// when worker window is ready
+ipcMain.on("readyToPrintPDF", (event) => {
+  workerWindow.webContents.print({silent: false});
+})
+
 
 //-------------------------------------------------------------------
 // Auto updates - Option 2 - More control
