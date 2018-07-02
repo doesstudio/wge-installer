@@ -6,6 +6,8 @@ const log = require('electron-log');
 const PDFWindow = require('electron-pdf-window')
 const {autoUpdater} = require("electron-updater");
 let path = require('path')
+const base64 = require('base64topdf');
+const FileBin = require('file-bin');
 //-------------------------------------------------------------------
 // Logging
 //
@@ -56,7 +58,6 @@ if (process.platform === 'darwin') {
 // that updates are working.
 //-------------------------------------------------------------------
 let win;
-
 function sendStatusToWindow(text) {
   log.info(text);
   win.webContents.send('message', text);
@@ -66,12 +67,12 @@ function sendProgressToWindow(speed,percent,transferred,total){
 }
 var updateChecker;
 function createPrintingWindow(){
-  const win = new PDFWindow({
-    width: 800,
-    height: 600
-  })
+  // const win = new PDFWindow({
+  //   width: 800,
+  //   height: 600
+  // })
  
-  win.loadURL("file://" + __dirname + "/app/transport-arrangement-2018-04-20-all.pdf")
+  // win.loadURL("file://" + __dirname + "/app/transport-arrangement-2018-04-20-all.pdf")
   // win.hide(); // hide when print not call
 }
 function createDefaultWindow() {
@@ -188,10 +189,27 @@ app.on('window-all-closed', () => {
 // });
 
 // retransmit it to workerWindow
-ipcMain.on("printPDF", function(event, content){
+ipcMain.on("printPDF", function(event, content,filename){
   // console.log('printPDF DONG')
-  workerWindow.webContents.send("printPDF", content);
-  // work
+  // win.webContents.send("printPDF", content);
+  const win = new PDFWindow({
+    width: 800,
+    height: 600
+  })
+  // let fileBin = new FileBin(`./`, ['.md', '.txt','.pdf']);
+  // fileBin.write('print.pdf', content)
+  //      .then(file => console.log(file));
+  let decodedBase64 = base64.base64Decode(content, filename+'.pdf');
+//   var fs = require('fs');
+// try { 
+//   // fs.writeHead({
+//   //   'Content-type': 'application/pdf'
+//   // })
+//   fs.writeFileSync('myfile.pdf', content, 'utf-8'); 
+// }
+// catch(e) { alert('Failed to save the file !'); }     
+  win.loadURL(win.loadURL("file://" + __dirname + '/'+filename+'.pdf'))
+//   // work
 });
 
 // when worker window is ready
