@@ -3,6 +3,7 @@
 
 const {app, BrowserWindow, Menu, protocol, ipcMain} = require('electron');
 const log = require('electron-log');
+const PDFWindow = require('electron-pdf-window')
 const {autoUpdater} = require("electron-updater");
 let path = require('path')
 //-------------------------------------------------------------------
@@ -64,6 +65,15 @@ function sendProgressToWindow(speed,percent,transferred,total){
   win.webContents.send('progress', percent);
 }
 var updateChecker;
+function createPrintingWindow(){
+  const win = new PDFWindow({
+    width: 800,
+    height: 600
+  })
+ 
+  win.loadURL("file://" + __dirname + "/app/transport-arrangement-2018-04-20-all.pdf")
+  // win.hide(); // hide when print not call
+}
 function createDefaultWindow() {
     win = new BrowserWindow({
     width: 1280, 
@@ -140,7 +150,8 @@ app.on('ready', function() {
   Menu.setApplicationMenu(menu);
 
   createDefaultWindow();
-
+  createPrintingWindow();
+  autoUpdater.checkForUpdatesAndNotify();
   setInterval(function(){
     // printVersion(app.getVersion())
     // console.log('alert')
@@ -162,17 +173,19 @@ app.on('window-all-closed', () => {
 // This will immediately download an update, then install when the
 // app quits.
 //-------------------------------------------------------------------
-app.on('ready', function()  {
-  autoUpdater.checkForUpdatesAndNotify();
+// app.on('ready', function()  {
+//   autoUpdater.checkForUpdatesAndNotify();
   // setInterval(function(){
   //   autoUpdater.checkForUpdatesAndNotify();
   // }, 6000)
-  workerWindow = new BrowserWindow();
-  workerWindow.loadURL("file://" + __dirname + "/app/printerWindow.html");
-  // `file://${__dirname}/app/index.html`
+
+  // workerWindow = new BrowserWindow();
+  // // workerWindow.loadURL("file://" + __dirname + "/app/printerWindow.html");
+  // workerWindow.loadURL("file://" + __dirname + "/app/transport-arrangement-2018-04-20-all.pdf");
+  // `file://${__dirname}/app/index.html` transport-arrangement-2018-04-20-all.pdf
   // console.log("file://" + __dirname + "/printerWindow.html")
-  workerWindow.hide();
-});
+  // workerWindow.hide();
+// });
 
 // retransmit it to workerWindow
 ipcMain.on("printPDF", function(event, content){
