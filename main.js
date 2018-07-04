@@ -199,7 +199,8 @@ ipcMain.on("printPDF", function(event, content,filename){
   // let fileBin = new FileBin(`./`, ['.md', '.txt','.pdf']);
   // fileBin.write('print.pdf', content)
   //      .then(file => console.log(file));
-  let decodedBase64 = base64.base64Decode(content, filename+'.pdf');
+  console.log(app.getPath('temp'))
+  let decodedBase64 = base64.base64Decode(content, app.getPath('temp')+filename+'.pdf');
 //   var fs = require('fs');
 // try { 
 //   // fs.writeHead({
@@ -208,7 +209,7 @@ ipcMain.on("printPDF", function(event, content,filename){
 //   fs.writeFileSync('myfile.pdf', content, 'utf-8'); 
 // }
 // catch(e) { alert('Failed to save the file !'); }     
-  win.loadURL(win.loadURL("file://" + __dirname + '/'+filename+'.pdf'))
+  win.loadURL(win.loadURL("file://" + app.getPath('temp') +filename+'.pdf'))
 //   // work
 });
 
